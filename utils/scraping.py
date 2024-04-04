@@ -51,6 +51,7 @@ driver.find_element(By.CSS_SELECTOR, 'i.icon-search').click()
 
 ## Downloading documents
 failed_downloads = []
+counter = 0
 #define function that downloads all files
 def get_files():
     boxes = driver.find_elements(By.CSS_SELECTOR, 'a.card-wrap.js-lightbox')
@@ -65,6 +66,7 @@ def get_files():
         try: #try downloading file
             driver.find_element(By.CSS_SELECTOR, 'i.icon-download').click()
             print('Download successful')
+            counter+=1
             time.sleep(2)
         except: #if download fails, store link to web address of doc to list
             driver.find_element(By.CSS_SELECTOR, 'a.copy-button.button').click()
@@ -85,4 +87,8 @@ while True:
         time.sleep(3)
     except NoSuchElementException:
         break
+
 driver.close()
+
+#print number of successful and unsuccessful downloads
+print(f'{len(failed_downloads)} failed downloads\n{counter} successful downloads.')
