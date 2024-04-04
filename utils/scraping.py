@@ -14,14 +14,17 @@ import clipboard
 
 
 ## Scraping
+
 #specify folder where downloads should be stored
+download_directory = '/Users/emilykruger/Documents/GitHub/frontex_analysis/data/risk analysis reports'
 prefs = {
-    'download.default_directory': '/Users/emilykruger/Documents/GitHub/frontex_analysis/data/risk analysis reports',
+    'download.default_directory': download_directory,
     'download.directory_upgrade': True,
     'download.prompt_for_download': False,
 }
 #set driver options
 chrome_options = Options()
+#chrome_options.add_argument('--headless') #enable for headless mode
 chrome_options.add_experimental_option("prefs", prefs)
 #setting up driver
 driver=webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
