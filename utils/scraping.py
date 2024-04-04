@@ -68,7 +68,7 @@ def get_files():
             print('Download successful')
             counter+=1
             time.sleep(2)
-        except: #if download fails, store link to web address of doc to list
+        except NoSuchElementException: #if download fails, store link to web address of doc to list
             driver.find_element(By.CSS_SELECTOR, 'a.copy-button.button').click()
             copied_link = clipboard.paste()
             failed_downloads.append(copied_link)
