@@ -1,2 +1,5 @@
 #venv files
 frontex_venv/
+
+#data
+data/
