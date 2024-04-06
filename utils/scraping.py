@@ -24,7 +24,7 @@ prefs = {
 }
 #set driver options
 chrome_options = Options()
-#chrome_options.add_argument('--headless') #enable for headless mode
+chrome_options.add_argument('--headless') #enable for headless mode
 chrome_options.add_experimental_option("prefs", prefs)
 #setting up driver
 driver=webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
@@ -55,6 +55,7 @@ counter = 0
 #define function that downloads all files
 def get_files():
     boxes = driver.find_elements(By.CSS_SELECTOR, 'a.card-wrap.js-lightbox')
+    global counter
     for box in boxes:
         #open overlay box and switch navigation to it
         box.click()
