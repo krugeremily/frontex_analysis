@@ -20,7 +20,7 @@ prefs = {
 }
 #set driver options
 chrome_options = Options()
-#chrome_options.add_argument('--headless') #enable for headless mode
+chrome_options.add_argument('--headless') #enable for headless mode
 chrome_options.add_experimental_option("prefs", prefs)
 #setting up driver
 driver=webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
