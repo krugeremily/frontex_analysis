@@ -3,3 +3,7 @@ frontex_venv/
 
 #data
 data/
+
+#other set-up files
+pyproject.toml
+someproject.egg-info/
