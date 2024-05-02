@@ -16,3 +16,8 @@ scikit-learn==1.3.2
 #plotting
 matplotlib==3.8.1
 seaborn==0.13.1
+
+
+#nlp
+pdfplumber==3.0.1
+nltk==3.8.1
