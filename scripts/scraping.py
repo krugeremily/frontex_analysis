@@ -6,17 +6,23 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException
+from selenium.common.exceptions import NoSuchElementException
 import time
-import clipboard
 
-
+#import functions defined in utils
+import sys
+import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+utils_dir = os.path.join(parent_dir, 'utils')
+sys.path.append(utils_dir)
+print(sys.path)
+print(os.listdir('/Users/emilykruger/Documents/GitHub/frontex_analysis/utils'))
+from utils.scraping_utils import get_files
 ## Scraping
 
 #specify folder where downloads should be stored
-download_directory = '/Users/emilykruger/Documents/GitHub/frontex_analysis/data/risk analysis reports'
+download_directory = '/Users/emilykruger/Documents/GitHub/frontex_analysis/data/raw_data_test'
 prefs = {
     'download.default_directory': download_directory,
     'download.directory_upgrade': True,
@@ -52,43 +58,6 @@ driver.find_element(By.CSS_SELECTOR, 'i.icon-search').click()
 ## Downloading documents
 failed_downloads = []
 counter = 0
-#define function that downloads all files
-def get_files():
-    boxes = driver.find_elements(By.CSS_SELECTOR, 'a.card-wrap.js-lightbox')
-    global counter
-    for box in boxes:
-        #open overlay box and switch navigation to it
-        box.click()
-        iframe = WebDriverWait(driver, 10).until(
-                EC.frame_to_be_available_and_switch_to_it((By.XPATH,'//*[@id="lightbox"]/div/iframe'))
-            )
-        #wait three seconds to make sure that download button is ready to be interacted with
-        time.sleep(3)
-        try: #try downloading file
-            driver.find_element(By.CSS_SELECTOR, 'i.icon-download').click()
-            print('Download successful')
-            counter+=1
-            time.sleep(2)
-            #close overlay box
-            driver.switch_to.default_content()
-            driver.find_element(By.CSS_SELECTOR, 'i.close.close-lightbox.icon-close').click()
-        except (NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException): #if download fails, try to store link to web address of doc to list
-            print('Download failed')
-            try: 
-                driver.find_element(By.CSS_SELECTOR, 'a.copy-button.button').click()
-                copied_link = clipboard.paste()
-                failed_downloads.append(copied_link)
-                #close overlay box
-                driver.switch_to.default_content()
-                driver.find_element(By.CSS_SELECTOR, 'i.close.close-lightbox.icon-close').click()
-            except NoSuchElementException: # if that fails, get name of doc
-                #close overlay box
-                driver.switch_to.default_content()
-                driver.find_element(By.CSS_SELECTOR, 'i.close.close-lightbox.icon-close').click()
-                #get title of doc
-                title = box.find_element(By.CLASS_NAME, 'card-title').text
-                failed_downloads.append(title)
-
 
 
 #download all files form all pages
