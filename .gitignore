@@ -5,5 +5,4 @@ frontex_venv/
 data/
 
 #other set-up files
-pyproject.toml
-someproject.egg-info/
+set-up files/
