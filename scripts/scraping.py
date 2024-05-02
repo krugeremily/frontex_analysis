@@ -8,21 +8,11 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 import time
-
-#import functions defined in utils
-import sys
-import os
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-utils_dir = os.path.join(parent_dir, 'utils')
-sys.path.append(utils_dir)
-print(sys.path)
-print(os.listdir('/Users/emilykruger/Documents/GitHub/frontex_analysis/utils'))
-from utils.scraping_utils import get_files
+from webutils.scraping_utils import get_files
 ## Scraping
 
 #specify folder where downloads should be stored
-download_directory = '/Users/emilykruger/Documents/GitHub/frontex_analysis/data/raw_data_test'
+download_directory = '/Users/emilykruger/Documents/GitHub/frontex_analysis/data/raw_data'
 prefs = {
     'download.default_directory': download_directory,
     'download.directory_upgrade': True,
@@ -30,7 +20,7 @@ prefs = {
 }
 #set driver options
 chrome_options = Options()
-chrome_options.add_argument('--headless') #enable for headless mode
+#chrome_options.add_argument('--headless') #enable for headless mode
 chrome_options.add_experimental_option("prefs", prefs)
 #setting up driver
 driver=webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
@@ -59,10 +49,9 @@ driver.find_element(By.CSS_SELECTOR, 'i.icon-search').click()
 failed_downloads = []
 counter = 0
 
-
 #download all files form all pages
 while True:
-    get_files()
+    counter = get_files(driver=driver, counter=counter, failed_downloads=failed_downloads)
     #check for next-page button
     print('Page done.')
     try: #try to click next-page button and give page time to load

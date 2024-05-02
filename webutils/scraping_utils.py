@@ -9,9 +9,8 @@ import time
 import clipboard
 
 #define function that downloads all files
-def get_files():
+def get_files(driver, counter, failed_downloads):
     boxes = driver.find_elements(By.CSS_SELECTOR, 'a.card-wrap.js-lightbox')
-    global counter
     for box in boxes:
         #open overlay box and switch navigation to it
         box.click()
@@ -44,3 +43,4 @@ def get_files():
                 #get title of doc
                 title = box.find_element(By.CLASS_NAME, 'card-title').text
                 failed_downloads.append(title)
+    return counter
