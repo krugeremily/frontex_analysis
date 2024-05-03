@@ -12,20 +12,20 @@ from gensim.models import Word2Vec
 
 # extract text from pdf, pre-process and save as txt file
 #preprocessing includes removing stopwords and punctuation, lowercasing and lemmetizing
-folder_path = '../data/raw_data'
-output_folder = '../data/preprocessed_data'
-os.makedirs(output_folder, exist_ok=True)
+raw_data = '../data/raw_data'
+preprocessed_data = '../data/preprocessed_data'
+os.makedirs(preprocessed_data, exist_ok=True)
 
-process_pdfs(folder_path, output_folder)
+process_pdfs(raw_data, preprocessed_data)
 
 #turn txt files into tokenized corpus
-corpus = create_corpus(output_folder)
+corpus = create_corpus(preprocessed_data)
 print(f'{len(corpus)} documents in corpus.')
 
 ####### TF-IDF #######
 
 # Calculate TF-IDF matrix, feature names, and file names and store in df
-tfidf_scores = calculate_tfidf(corpus)
+tfidf_scores = calculate_tfidf(corpus, preprocessed_data)
 os.makedirs('../results', exist_ok=True)
 tfidf_df = pd.DataFrame(tfidf_scores).to_csv('../results/tfidf.csv')
 
