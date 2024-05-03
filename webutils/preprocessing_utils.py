@@ -47,8 +47,8 @@ def preprocess_text(text):
 #combine both pre-processing steps in one function and store file as txt in new folder
 def process_pdfs(folder_path, output_folder):
     pdf_files = [f for f in os.listdir(folder_path) if f.endswith('.pdf')]
-    
-    for pdf_file in pdf_files:
+    total_docs = len(pdf_files)
+    for i, pdf_file in enumerate(pdf_files):
         pdf_path = os.path.join(folder_path, pdf_file)
         
         # Extract text using pre-defined function
@@ -62,7 +62,7 @@ def process_pdfs(folder_path, output_folder):
         with open(output_file_path, 'w', encoding='utf-8') as txt_file:
             txt_file.write(preprocessed_text)
         
-        print('Preprocessing for doc done')
+        print(f'Preprocessing for document {i+1}/{total_docs} done.')
 
 #load txt files and turn them into tokenized corpus
 def create_corpus(folder_path):
