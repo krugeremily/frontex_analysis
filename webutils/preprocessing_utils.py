@@ -1,6 +1,7 @@
 ## functions for pre-processing pdf-files
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 import re
 import os
 import pdfplumber
@@ -22,8 +23,10 @@ def preprocess_text(text):
     #remove puncuation and newline characters
     pattern1 = r"[^\w\s']"
     pattern2 = '\n'
+    pattern3 = r'\d+'
     text = re.sub(pattern1, '', text)
     text = re.sub(pattern2, ' ', text)
+    text = re.sub(pattern3, ' ', text)
 
     #tokenize
     tokens = word_tokenize(text)
@@ -31,12 +34,17 @@ def preprocess_text(text):
     # Remove stopwords
     stop_words = set(stopwords.words('english'))
     filtered_tokens = [token for token in tokens if token not in stop_words]
+    #lemmetize tokens
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_tokens = [lemmatizer.lemmatize(token) for token in filtered_tokens]
     
     # Convert tokens back to text
-    preprocessed_text = ' '.join(filtered_tokens)
+    preprocessed_text = ' '.join(lemmatized_tokens)
     
     return preprocessed_text
 
+
+#combine both pre-processing steps in one function and store file as txt in new folder
 def process_pdfs(folder_path, output_folder):
     pdf_files = [f for f in os.listdir(folder_path) if f.endswith('.pdf')]
     
@@ -55,3 +63,17 @@ def process_pdfs(folder_path, output_folder):
             txt_file.write(preprocessed_text)
         
         print('Preprocessing for doc done')
+
+#load txt files and turn them into tokenized corpus
+def create_corpus(folder_path):
+    tokenized_corpus = []
+
+    files = os.listdir(folder_path)
+    for file in files:
+        if file.endswith('.txt'):
+            with open(os.path.join(folder_path, file), 'r', encoding='utf-8') as f:
+                text = f.read()
+                tokens = word_tokenize(text.lower())  # Tokenize and convert to lowercase
+                tokenized_corpus.append(tokens)
+    
+    return tokenized_corpus
