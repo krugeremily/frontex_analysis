@@ -22,8 +22,8 @@ def calculate_tfidf(tokenized_corpus, folder_path):
     for i, filename in enumerate(file_names):
         tfidf_scores = list(zip(feature_names, tfidf_matrix[i].toarray().flatten()))
         tfidf_scores.sort(key=lambda x: x[1], reverse=True)
-        top_tfidf_words = [word for word, score in tfidf_scores]
-        result.append({'Filename': filename, 'Top 5 TF-IDF Words': top_tfidf_words})
+        top_tfidf_words = [word for word, score in tfidf_scores[:10]]
+        result.append({'Filename': filename, 'Top 10 TF-IDF Words': top_tfidf_words})
 
     return result
 
