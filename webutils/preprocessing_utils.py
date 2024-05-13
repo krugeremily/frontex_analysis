@@ -1,7 +1,7 @@
 ## functions for pre-processing pdf-files
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
+import spacy
 import re
 import os
 import pdfplumber
@@ -16,11 +16,13 @@ def extract_text(pdf_path):
                 text += page_text
     return text
 
+
 def preprocess_text(text):
+    nlp = spacy.load('en_core_web_sm')
     # Convert to lowercase
     text = text.lower()
     
-    #remove puncuation and newline characters
+    #remove puncuation, newline and digits characters
     pattern1 = r"[^\w\s']"
     pattern2 = '\n'
     pattern3 = r'\d+'
@@ -28,16 +30,10 @@ def preprocess_text(text):
     text = re.sub(pattern2, ' ', text)
     text = re.sub(pattern3, ' ', text)
 
-    #tokenize
-    tokens = word_tokenize(text)
-    
-    # Remove stopwords
-    stop_words = set(stopwords.words('english'))
-    filtered_tokens = [token for token in tokens if token not in stop_words]
-    #lemmetize tokens
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_tokens = [lemmatizer.lemmatize(token) for token in filtered_tokens]
-    
+    #tokenize, lemmatize and remove stopwords
+    doc=nlp(text)
+    lemmatized_tokens = [token.lemma_ for token in doc if token.text not in nlp.Defaults.stop_words]
+
     # Convert tokens back to text
     preprocessed_text = ' '.join(lemmatized_tokens)
     
