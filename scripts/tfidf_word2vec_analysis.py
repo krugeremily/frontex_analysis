@@ -6,21 +6,29 @@ import pandas as pd
 from webutils.preprocessing_utils import process_pdfs, create_corpus
 from webutils.analysis_utils import calculate_tfidf
 from gensim.models import Word2Vec
+import pickle
 
 
 ####### Pre-Processing Data #######
 
 # extract text from pdf, pre-process and save as txt file
 #preprocessing includes removing stopwords and punctuation, lowercasing and lemmetizing
-# raw_data = '../data/raw_data'
+raw_data = '../data/raw_data'
 preprocessed_data = '../data/preprocessed_data'
-# os.makedirs(preprocessed_data, exist_ok=True)
-
-# process_pdfs(raw_data, preprocessed_data)
-# print('Preprocessing done.')
+corpus_folder = '../data/corpus'
+os.makedirs(preprocessed_data, exist_ok=True)
+os.makedirs(corpus_folder, exist_ok=True)
+process_pdfs(raw_data, preprocessed_data)
+print('Preprocessing done.')
 #turn txt files into tokenized corpus
 corpus = create_corpus(preprocessed_data)
 print(f'Corpus created. {len(corpus)} documents in corpus.')
+
+# Save corpus
+corpus_file_path = os.path.join(corpus_folder, 'corpus.pkl')
+with open(corpus_file_path, 'wb') as f:
+    pickle.dump(corpus, f)
+print('Corpus saved.')
 
 ####### TF-IDF #######
 
@@ -32,20 +40,11 @@ print('TF-IDF done.')
 
 ####### Most Similar Words with Word2Vec #######
 
-# #train word2vec model
-# model = Word2Vec(sentences=corpus, vector_size=150, window=3, min_count=1, sg=1, epochs=10)
-# print('Word2Vec model trained.')
-# # Find similar words to "migrant", "migration" and "refugee" using the fine-tuned model
-# similar_words_migration = model.wv.most_similar('migration', topn=5)
-# print("Similar words to 'migration':", similar_words_migration)
+#train word2vec model
+model = Word2Vec(sentences=corpus, vector_size=150, window=3, min_count=1, sg=1, epochs=10)
+print('Word2Vec model trained.')
 
-# similar_words_migrant = model.wv.most_similar('migrant', topn=5)
-# print("Similar words to 'migrant':", similar_words_migrant)
-
-# similar_words_refugee = model.wv.most_similar('refugee', topn=5)
-# print("Similar words to 'refugee':", similar_words_refugee)
-
-# #save model
-# os.makedirs('../model', exist_ok=True)
-# model.save('../model/word2vec_model.model')
-# print('Model saved.')
+#save model
+os.makedirs('../model', exist_ok=True)
+model.save('../model/word2vec_model.model')
+print('Model saved.')
