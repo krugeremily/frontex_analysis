@@ -8,6 +8,7 @@ from webutils.analysis_utils import calculate_tfidf
 from gensim.models import Word2Vec
 import pickle
 
+################################# ANALYSIS ON FULL CORPUS #################################
 
 ####### Pre-Processing Data #######
 
@@ -16,35 +17,71 @@ import pickle
 raw_data = '../data/raw_data'
 preprocessed_data = '../data/preprocessed_data'
 corpus_folder = '../data/corpus'
-os.makedirs(preprocessed_data, exist_ok=True)
-os.makedirs(corpus_folder, exist_ok=True)
-process_pdfs(raw_data, preprocessed_data)
-print('Preprocessing done.')
-#turn txt files into tokenized corpus
-corpus = create_corpus(preprocessed_data)
-print(f'Corpus created. {len(corpus)} documents in corpus.')
+# os.makedirs(preprocessed_data, exist_ok=True)
+# os.makedirs(corpus_folder, exist_ok=True)
+# process_pdfs(raw_data, preprocessed_data)
+# print('Preprocessing done.')
+# #turn txt files into tokenized corpus
+# corpus = create_corpus(preprocessed_data)
+# print(f'Full Corpus created. {len(corpus)} documents in corpus.')
+
+# # Save corpus
+# corpus_file_path = os.path.join(corpus_folder, 'corpus.pkl')
+# with open(corpus_file_path, 'wb') as f:
+#     pickle.dump(corpus, f)
+# print('Full Corpus saved.')
+
+# ####### TF-IDF #######
+
+# # Calculate TF-IDF matrix, feature names, and file names and store in df
+# tfidf_scores = calculate_tfidf(corpus, folder_path=preprocessed_data)
+# os.makedirs('../results', exist_ok=True)
+# tfidf_df = pd.DataFrame(tfidf_scores).to_csv('../results/tfidf.csv')
+# print('TF-IDF (Full Corpus) done.')
+
+# ####### Most Similar Words with Word2Vec #######
+
+# #train word2vec model
+# model = Word2Vec(sentences=corpus, vector_size=150, window=3, min_count=1, sg=1, epochs=10)
+# print('Word2Vec model trained.')
+
+# #save model
+# os.makedirs('../model', exist_ok=True)
+# model.save('../model/word2vec_model.model')
+# print('Model saved.')
+
+################################# ANALYSIS ON ANNUAL REPORTS ONLY #################################
+
+####### Pre-Processing Data #######
+
+#move copy of preprocessed files that contain risk_analysis in filename tonew folder
+preprocessed_data_annual = '../data/preprocessed_data_annual'
+os.makedirs(preprocessed_data_annual, exist_ok=True)
+
+#move copy of annual risk analysis files to newly created folder
+annual_reports = [f for f in os.listdir(preprocessed_data) if 'analysis' in f]
+for report in annual_reports:
+    report_path = os.path.join(preprocessed_data, report)
+    new_report_path = os.path.join(preprocessed_data_annual, report)
+    with open(report_path, 'r', encoding='utf-8') as f:
+        text = f.read()
+    with open(new_report_path, 'w', encoding='utf-8') as f:
+        f.write(text)
+
+#delete falsely selected file
+os.remove(os.path.join(preprocessed_data_annual, 'common-integrated-risk-analysis-model-version-summary-booklet-2.1.txt'))
+
+corpus_annual = create_corpus(preprocessed_data_annual)
+print(f'Annual Corpus created. {len(corpus_annual)} documents in corpus.')
 
 # Save corpus
-corpus_file_path = os.path.join(corpus_folder, 'corpus.pkl')
-with open(corpus_file_path, 'wb') as f:
-    pickle.dump(corpus, f)
-print('Corpus saved.')
+corpus_file_path_annual = os.path.join(corpus_folder, 'corpus_annual.pkl')
+with open(corpus_file_path_annual, 'wb') as f:
+    pickle.dump(corpus_annual, f)
+print('Annual Corpus saved.')
 
 ####### TF-IDF #######
-
 # Calculate TF-IDF matrix, feature names, and file names and store in df
-tfidf_scores = calculate_tfidf(corpus, folder_path=preprocessed_data)
-os.makedirs('../results', exist_ok=True)
-tfidf_df = pd.DataFrame(tfidf_scores).to_csv('../results/tfidf.csv')
-print('TF-IDF done.')
-
-####### Most Similar Words with Word2Vec #######
-
-#train word2vec model
-model = Word2Vec(sentences=corpus, vector_size=150, window=3, min_count=1, sg=1, epochs=10)
-print('Word2Vec model trained.')
-
-#save model
-os.makedirs('../model', exist_ok=True)
-model.save('../model/word2vec_model.model')
-print('Model saved.')
+tfidf_scores_annual = calculate_tfidf(corpus_annual, folder_path=preprocessed_data_annual)
+tfidf_df = pd.DataFrame(tfidf_scores_annual).to_csv('../results/tfidf_annual.csv')
+print('TF-IDF (Annual) done.')
