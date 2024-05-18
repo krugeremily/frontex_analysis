@@ -1,6 +1,5 @@
 ## functions for pre-processing pdf-files
 from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
 import spacy
 import re
 import os
@@ -42,7 +41,7 @@ def preprocess_text(text):
 
 #combine both pre-processing steps in one function and store file as txt in new folder
 def process_pdfs(folder_path, output_folder):
-    pdf_files = [f for f in os.listdir(folder_path) if f.endswith('.pdf')]
+    pdf_files = [f for f in sorted(os.listdir(folder_path)) if f.endswith('.pdf')]
     total_docs = len(pdf_files)
     for i, pdf_file in enumerate(pdf_files):
         pdf_path = os.path.join(folder_path, pdf_file)
@@ -64,7 +63,8 @@ def process_pdfs(folder_path, output_folder):
 def create_corpus(folder_path):
     tokenized_corpus = []
 
-    files = os.listdir(folder_path)
+    #make sure that documents have same alphabetical order as in folder
+    files = sorted(os.listdir(folder_path))
     for file in files:
         if file.endswith('.txt'):
             with open(os.path.join(folder_path, file), 'r', encoding='utf-8') as f:
@@ -73,3 +73,5 @@ def create_corpus(folder_path):
                 tokenized_corpus.append(tokens)
     
     return tokenized_corpus
+
+
