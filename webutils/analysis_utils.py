@@ -5,6 +5,7 @@ import nltk
 nltk.download('wordnet')
 nltk.download('punkt')
 nltk.download('stopwords')
+import math
 
 
 def calculate_tfidf(tokenized_corpus, folder_path):
@@ -27,6 +28,16 @@ def calculate_tfidf(tokenized_corpus, folder_path):
 
     return result
 
-
+#function to compute keyness score
+def compute_keyness(word, doc_freq, ref_freq, doc_size, ref_size):
+    if doc_size == 0 or ref_size == 0:
+        return 0
+    #expected frequency
+    expected_freq=(doc_size*ref_freq)/(doc_size+ref_size)
+    #compute keyness score using log-likelihood ratio
+    if doc_freq > expected_freq and expected_freq > 0:
+        return 2*(doc_freq*math.log(doc_freq/expected_freq))
+    else:
+        return 0
 
 
