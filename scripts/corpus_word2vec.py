@@ -101,11 +101,23 @@ print('Annual Word2Vec Model saved.')
 
 ####### Unpreprocessed-Corpus for Word Cloud #######
 
-#create corpus of un-pre-processed annual reports for wordcloud
-annual_raw_reports = [extract_text(f) for f in sorted(os.listdir(raw_data)) 
-                      if 'analysis' in f and 
+#move copy of raw files that contain risk_analysis in filename to new folder
+raw_data_annual = '../data/raw_data_annual'
+os.makedirs(raw_data_annual, exist_ok=True)
+
+#move copy of annual risk analysis files to newly created folder
+annual_reports_raw = [f for f in sorted(os.listdir(raw_data)) if 'analysis' in f and 
                       f != 'common-integrated-risk-analysis-model-version-summary-booklet-2.1.pdf']
-corpus_annual_raw= create_corpus(annual_raw_reports)
+
+for report in annual_reports_raw:
+    report_path = os.path.join(raw_data, report)
+    new_report_path = os.path.join(raw_data_annual, os.path.splitext(report)[0] + '.txt')
+    text = extract_text(report_path)
+    with open(new_report_path, 'w', encoding='utf-8') as f:
+        f.write(text)
+
+#create corpus of un-pre-processed annual reports for wordcloud
+corpus_annual_raw= create_corpus(raw_data_annual)
 print(f'Unpreprocessed Corpus created. {len(corpus_annual_raw)} documents in corpus.')
 
 #save corpus 
