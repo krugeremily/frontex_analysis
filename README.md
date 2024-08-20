@@ -12,7 +12,7 @@ After giving an overview on the relevant political theory and existing research 
 - converts the pdf files to useable formats
 - performs different computationally efficient NLP methods to analyze the text corpus, such as
 	- word cloud
-	- bi-grams
-	- Word2Vec
-	- TF-IDF
-- explores and visualizes the results
+	- bi-grams using **nltk**
+	- **Word2Vec** (with gensim)
+	- TF-IDF using **sklearn**
+- explores and visualizes the results in **seaborn and matplotlib**
