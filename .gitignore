@@ -3,3 +3,10 @@ frontex_venv/
 
 #data
 data/
+
+#other set-up files
+.DS_Store
+set-up files/
+
+#model
+model/
