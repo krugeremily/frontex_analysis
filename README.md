@@ -1,8 +1,8 @@
 # Analysis of FRONTEX Risk Analysis Reports
 
-This project was conducted as an Exam for the course The Politics of Borders and Migration Control: Critical Social Science Approaches at the University of Copenhagen in Spring 2024 (https://kurser.ku.dk/course/astk18441u/2023-2024). The exam was graded 12 (A).
+This project was conducted as an Exam for the course [The Politics of Borders and Migration Control: Critical Social Science Approaches at the University of Copenhagen in Spring 2024](https://kurser.ku.dk/course/astk18441u/2023-2024). The exam was graded 12 (A).
 
-It showcases, how basic and computationally efficient NLP methods can support, up-scale and focus the analysis on a political text corpus.
+It showcases, how basic and computationally efficient NLP methods can support, up-scale and focus the analysis on a political text corpus. See the full written exam [here](README.md).
 
 # Project Overview
 
